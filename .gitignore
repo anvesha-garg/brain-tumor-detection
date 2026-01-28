@@ -1,0 +1,9 @@
+# Data 
+data\raw\ 
+*.jpg 
+*.JPG 
+*.png 
+__pycache__/ 
+venv/ 
+.venv/ 
+.vscode/ 
