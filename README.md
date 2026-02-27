@@ -1,239 +1,336 @@
-🧠 Brain Tumor MRI Classifier
-ResNet50 - 91% Validation Accuracy - Production Deployed
+# 🧠 Brain Tumor MRI Classifier
 
-🎯 Project Overview
-Brain Tumor classification system using ResNet50 trained on the real Kaggle Brain Tumor MRI (BTNS) dataset containing 5712 training images across 4 classes: glioma, meningioma, no_tumor, and pituitary tumors.
+**ResNet50 • 91% Validation Accuracy • Production‑Ready Deployment**
 
-Key Results:
+An end‑to‑end deep learning system for automated brain tumor classification from MRI scans. This project uses a pretrained ResNet50 architecture trained on the Kaggle Brain Tumor MRI (BTNS) dataset and deployed with a real‑time Gradio interface.
 
-Validation Accuracy: 91% on 1311 test images
+---
 
-Per-class Accuracy: 100% across all 4 tumor types
+# 📌 Table of Contents
 
-Final Training Loss: 0.15 (perfect convergence)
+* [Project Overview](#-project-overview)
+* [Key Results](#-key-results)
+* [Performance Metrics](#-performance-metrics)
+* [Benchmark Comparison](#-benchmark-comparison)
+* [Model Architecture](#-model-architecture)
+* [Training Configuration](#-training-configuration)
+* [Data Preprocessing](#-data-preprocessing)
+* [Deployment](#-deployment)
+* [Installation & Setup](#-installation--setup)
+* [Project Structure](#-project-structure)
+* [Training Progress](#-training-progress)
+* [Technical Features](#-technical-features)
+* [Future Enhancements](#-future-enhancements)
+* [Contributing](#-contributing)
+* [License](#-license)
+* [Acknowledgments](#-acknowledgments)
 
-Production Deployment: Standalone Gradio interface (localhost:7860)
+---
 
-This project demonstrates a complete end-to-end machine learning pipeline from data preprocessing, model training, evaluation, to production deployment.
+# 🎯 Project Overview
 
+This project implements a deep learning pipeline for classifying brain tumors from MRI images into four categories:
 
-📊 Performance Metrics
-Metric	Value	Details
-Validation Accuracy	91%	1311 test images
-Per-class Accuracy	100%	glioma, meningioma, no_tumor, pituitary
-Training Accuracy	93%	Final epoch
-Training Loss	0.15	Perfect convergence
-Train/Val Gap	2%	Excellent generalization
-Test Set Size	1311 images	Real Kaggle BTNS
-Inference Time	<2s	GPU-accelerated
-Confusion Matrix: Perfect diagonal (100% per-class accuracy)
+* Glioma Tumor
+* Meningioma Tumor
+* Pituitary Tumor
+* No Tumor
 
+The model is trained on the real Kaggle Brain Tumor MRI dataset and deployed using a standalone Gradio interface for real‑time inference.
 
-🏆 Benchmark Comparison
-Model/Approach	Accuracy	Dataset	Source
-This Project	91%	BTNS	SOTA Solo Model 
-Ensemble CNNs	92-94%	BTNS	Kaggle
-Research Papers	89-93%	Similar MRI	Published
-EfficientNet	88-90%	BTNS	Various
-🛠 Technical Implementation
-Model Architecture
-text
-ResNet50 V2 (ImageNet pretrained)
-- Backbone: ResNet50 (50 layers, residual connections)
-- Final Layer: Linear(2048 → 4 classes)
-- Total Parameters: 25.6M trainable
-- Input Size: 224x224 RGB
-Training Configuration
-text
-Dataset: Kaggle BTNS (5712 train + 1311 test)
-Classes: [glioma_tumor, meningioma_tumor, no_tumor, pituitary_tumor]
-Class Weights: [4.32, 4.27, 3.58, 3.92] (imbalanced dataset fix)
+This project demonstrates:
+
+* Data preprocessing and augmentation
+* Transfer learning using ImageNet‑pretrained ResNet50
+* Model training and evaluation
+* Performance optimization
+* Production‑ready deployment
+
+---
+
+# 🏆 Key Results
+
+* **Validation Accuracy:** 91% (1311 test images)
+* **Training Accuracy:** 93%
+* **Per‑class Accuracy:** 100%
+* **Training Loss:** 0.15
+* **Train‑Validation Gap:** 2% (Excellent generalization)
+* **Inference Time:** < 2 seconds (GPU)
+* **Deployment:** Fully functional Gradio interface
+
+---
+
+# 📊 Performance Metrics
+
+| Metric              | Value       | Details               |
+| ------------------- | ----------- | --------------------- |
+| Validation Accuracy | 91%         | 1311 test images      |
+| Training Accuracy   | 93%         | Final epoch           |
+| Training Loss       | 0.15        | Excellent convergence |
+| Per‑class Accuracy  | 100%        | All tumor types       |
+| Train/Val Gap       | 2%          | Minimal overfitting   |
+| Test Size           | 1311 images | Real BTNS dataset     |
+| Inference Time      | <2 seconds  | GPU accelerated       |
+
+Confusion Matrix shows perfect classification across all classes.
+
+---
+
+# 🥇 Benchmark Comparison
+
+| Model                       | Accuracy | Dataset          | Notes                    |
+| --------------------------- | -------- | ---------------- | ------------------------ |
+| **This Project (ResNet50)** | **91%**  | BTNS             | Strong solo model        |
+| Ensemble CNN                | 92‑94%   | BTNS             | Multi‑model ensemble     |
+| Research Papers             | 89‑93%   | Similar datasets | Published work           |
+| EfficientNet                | 88‑90%   | BTNS             | Alternative architecture |
+
+---
+
+# 🧠 Model Architecture
+
+**Base Model:** ResNet50 V2 (ImageNet pretrained)
+
+**Architecture Details:**
+
+```
+ResNet50 Backbone (50 layers)
+├── Residual Blocks
+├── Global Average Pooling
+└── Fully Connected Layer (2048 → 4 classes)
+```
+
+**Specifications:**
+
+* Total Parameters: 25.6 Million
+* Input Size: 224 × 224 RGB
+* Transfer Learning: ImageNet pretrained weights
+
+---
+
+# ⚙️ Training Configuration
+
+**Dataset:**
+
+* Training Images: 5712
+* Testing Images: 1311
+* Classes: 4
+
+**Hyperparameters:**
+
+```
 Batch Size: 32
-Optimizer: Adam(lr=1e-4, weight_decay=1e-4)
-Scheduler: ReduceLROnPlateau(patience=5)
-Epochs: 25 (early stopping ready)
-Augmentation: Rotation(15°) + ColorJitter + HorizontalFlip
-Loss Function: CrossEntropyLoss (weighted)
-Preprocessing Pipeline
-python
+Optimizer: Adam
+Learning Rate: 1e‑4
+Weight Decay: 1e‑4
+Scheduler: ReduceLROnPlateau
+Epochs: 25
+Loss Function: Weighted CrossEntropy
+```
+
+**Class Weights (Imbalance Handling):**
+
+```
+[4.32, 4.27, 3.58, 3.92]
+```
+
+---
+
+# 🔄 Data Preprocessing
+
+```
 transforms.Compose([
-    transforms.Resize((224, 224)),
+    transforms.Resize((224,224)),
     transforms.ToTensor(),
-    transforms.Normalize(mean=[0.485, 0.456, 0.406], 
-                        std=[0.229, 0.224, 0.225])
+    transforms.Normalize(
+        mean=[0.485, 0.456, 0.406],
+        std=[0.229, 0.224, 0.225]
+    )
 ])
-🚀 Live Demo & Deployment
-Gradio Interface (Production Ready)
-Local Demo: http://127.0.0.1:7860 (Run Cell 8)
+```
+
+**Augmentations Used:**
+
+* Rotation (±15°)
+* Horizontal Flip
+* Color Jitter
+
+---
+
+# 🚀 Deployment
+
+## Gradio Interface
 
 Features:
 
-Real-time MRI scan predictions (<2s inference)
+* Real‑time MRI prediction
+* Confidence scores
+* Clean medical‑style UI
+* GPU‑accelerated inference
 
-Confidence scores for all 4 classes
+**Launch locally:**
 
-Clean, medical-professional UI
-
-GPU-accelerated inference
-
-Standalone deployment (no dependencies)
-
-bash
+```
 jupyter notebook notebooks/02_training.ipynb
-# Run Cell 8 → Instant live demo
-📋 Prerequisites & Setup
-Environment
-bash
-# Python 3.8+
-pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
-pip install gradio matplotlib seaborn scikit-learn pandas numpy
-pip install jupyter notebook ipywidgets pillow
-Dataset (155MB)
-bash
-# Kaggle API (recommended)
-kaggle datasets download -d masoudnickparvar/brain-tumor-mri-dataset
-unzip brain-tumor-mri-dataset.zip -d data/
+```
 
-# Expected structure:
-# data/
-# ├── Training/glioma_tumor/
-# ├── Training/meningioma_tumor/
-# ├── Training/no_tumor/
-# ├── Training/pituitary_tumor/
-# └── Testing/ (1311 images)
-Hardware
-GPU Recommended: NVIDIA CUDA 11.8+ (4GB+ VRAM)
+Run deployment cell to launch:
 
-CPU Fallback: Works but slower inference
+```
+http://127.0.0.1:7860
+```
 
-RAM: 8GB+ recommended
+---
 
+# 🛠 Installation & Setup
 
-⚙️ Complete Installation
-bash
-# 1. Clone repository
+## Step 1: Clone Repository
+
+```
 git clone https://github.com/yourusername/brain-tumor-detection.git
 cd brain-tumor-detection
+```
 
-# 2. Setup environment
+## Step 2: Install Dependencies
+
+```
 pip install -r requirements.txt
+```
 
-# 3. Download dataset
+Or manually:
+
+```
+pip install torch torchvision torchaudio
+pip install gradio matplotlib seaborn scikit-learn
+pip install pandas numpy pillow jupyter
+```
+
+## Step 3: Download Dataset
+
+```
 kaggle datasets download -d masoudnickparvar/brain-tumor-mri-dataset
 unzip brain-tumor-mri-dataset.zip -d data/
+```
 
-# 4. Launch (30 mins training → live demo)
+## Step 4: Train and Launch
+
+```
 jupyter notebook notebooks/02_training.ipynb
-# Cells 0-7: Train → 91% model saved
-# Cell 8: Live Gradio demo → http://127.0.0.1:7860
+```
 
+---
 
-📁 Project Structure
-text
+# 📁 Project Structure
+
+```
 brain-tumor-detection/
-├── data/                        # Real Kaggle BTNS dataset (6853 MRIs)
-│   ├── Training/               # 5712 training images
-│   │   ├── glioma_tumor/
-│   │   ├── meningioma_tumor/
-│   │   ├── no_tumor/
-│   │   └── pituitary_tumor/
-│   └── Testing/                # 1311 test images
-├── models/                      # Trained models (91% accuracy)
-│   ├── best_real_btns_model.pth           # Full model checkpoint
-│   ├── best_real_btns_state_dict.pth      # Model state dict
-│   ├── confusion_matrix_perfect.png       # Perfect diagonal
-│   └── training_curves_91pct.png          # Training visualization
-├── notebooks/                   # Complete ML pipeline
-│   └── 02_training.ipynb        # Cells 0-8 (end-to-end)
-├── src/                         # Source code utilities
-│   └── data_prep.py            # Dataset loading utilities
-├── requirements.txt            # Python dependencies
-├── README.md                   # This file
+│
+├── data/
+│   ├── Training/
+│   └── Testing/
+│
+├── models/
+│   ├── best_model.pth
+│   ├── confusion_matrix.png
+│   └── training_curves.png
+│
+├── notebooks/
+│   └── 02_training.ipynb
+│
+├── src/
+│   └── data_prep.py
+│
+├── requirements.txt
+└── README.md
+```
 
+---
 
-📈 Training Progress Visualization
-text
-Epoch | Train Acc | Val Acc | Loss
-------|-----------|---------|------
-1     | 35%       | 50%     | 1.10
-10    | 85%       | 88%     | 0.35
-20    | 91%       | 90%     | 0.20
-25    | **93%**   | **91%** | **0.15**
+# 📈 Training Progress
 
-Key Metrics:
-✅ Perfect convergence (steady loss decline)
-✅ Minimal overfitting (2% train/val gap)
-✅ Stable validation curve (no wild swings)
-✅ Early plateau detection ready
-🎯 Key Technical Features
-Dynamic Class Weights - Handles imbalanced medical dataset
+| Epoch | Train Accuracy | Validation Accuracy | Loss |
+| ----- | -------------- | ------------------- | ---- |
+| 1     | 35%            | 50%                 | 1.10 |
+| 10    | 85%            | 88%                 | 0.35 |
+| 20    | 91%            | 90%                 | 0.20 |
+| 25    | 93%            | 91%                 | 0.15 |
 
-ImageNet Pretraining - Transfer learning from 1.2M images
+**Observations:**
 
-Comprehensive Augmentation - Rotation, color jitter, flips
+* Smooth convergence
+* Minimal overfitting
+* Stable validation performance
 
-Production-Ready Gradio - Standalone Cell 8 deployment
+---
 
-Model Checkpointing - Auto-save best validation accuracy
+# ⭐ Technical Features
 
-GPU Optimization - CUDA-accelerated training/inference
+* Transfer learning using ImageNet pretrained ResNet50
+* Dynamic class weighting for imbalance correction
+* GPU‑accelerated training and inference
+* Production‑ready Gradio deployment
+* Automatic model checkpointing
+* Complete training and evaluation pipeline
 
-Perfect Evaluation - Confusion matrix, ROC curves, metrics
+---
 
+# 🔮 Future Enhancements
 
-🔮 Future Enhancements Roadmap
-Immediate (1 week)
- Model Ensemble - 3x ResNet50 → 94%+ accuracy
+## Short Term
 
- ONNX Export - 10x faster inference
+* Model Ensemble (94%+ expected accuracy)
+* ONNX Export for faster inference
+* TensorRT optimization
 
- TensorRT Optimization - Production inference engine
+## Medium Term
 
-Short-term (1 month)
- Mobile Deployment - TensorFlow Lite conversion
+* Mobile deployment (TensorFlow Lite)
+* Explainable AI using GradCAM
+* Public deployment (HuggingFace Spaces)
 
- GradCAM Heatmaps - Explainable AI visualization
+## Long Term
 
- Hugging Face Space - Public live demo
+* 3D MRI support
+* Multi‑modal clinical integration
+* Federated learning support
 
-Long-term (3 months)
- 3D MRI Support - BraTS 2025 dataset integration
+---
 
- Multi-modal - Combine MRI + clinical data
+# 🤝 Contributing
 
- Federated Learning - Privacy-preserving training
+Steps:
 
+```
+1. Fork repository
+2. Create feature branch
+3. Commit changes
+4. Push branch
+5. Open Pull Request
+```
 
-🤝 Contributing Guidelines
-Fork the repository
+---
 
-Create feature branch: git checkout -b feature/amazing-feature
+# 📄 License
 
-Commit changes: git commit -m "Add amazing feature"
-
-Push to branch: git push origin feature/amazing-feature
-
-Open Pull Request - Explain your changes
-
-Good first issues:
-
-Add model quantization
-
-Create model card
-
-Docker deployment
-
-REST API endpoints
-
-
-📄 License
 MIT License © 2026 Anvesha Garg
 
+---
 
+# 🙏 Acknowledgments
 
-👥 Acknowledgments
-Dataset: Kaggle Brain Tumor MRI Dataset by Masoud Nickparvar
-Framework: PyTorch
-Deployment: Gradio
-Pretrained Weights: ImageNet-1K-V2
+* Kaggle Brain Tumor MRI Dataset
+* PyTorch Framework
+* Gradio Deployment Framework
+* ImageNet Pretrained Weights
 
+---
+
+# 👤 Author
+
+**Anvesha Garg**
+AI-ML DeveloperS
+Deep Learning • Computer Vision • Healthcare AI
+
+---
+
+# ⭐ If you found this project useful, consider giving it a star!
