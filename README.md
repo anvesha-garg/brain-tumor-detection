@@ -329,7 +329,6 @@ MIT License © 2026 Anvesha Garg
 
 **Anvesha Garg**
 AI-ML Developer
-Deep Learning • Computer Vision • Healthcare AI
 
 ---
 
