@@ -1,4 +1,4 @@
-# 🧠 Brain Tumor MRI Classifier
+# 🧠 Brain Tumor Detection System- MRI Classifier
 
 **ResNet50 • 91% Validation Accuracy • Production‑Ready Deployment**
 
@@ -328,9 +328,9 @@ MIT License © 2026 Anvesha Garg
 # 👤 Author
 
 **Anvesha Garg**
-AI-ML DeveloperS
+AI-ML Developer
 Deep Learning • Computer Vision • Healthcare AI
 
 ---
 
-# ⭐ If you found this project useful, consider giving it a star!
+If you found this project useful, consider giving it a star!
