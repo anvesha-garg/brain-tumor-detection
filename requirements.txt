@@ -1,10 +1,10 @@
-torch 
-torchvision 
-opencv-python 
-pillow 
-matplotlib 
-numpy 
-pandas 
-scikit-learn 
-streamlit 
-jupyter 
+torch
+torchvision
+opencv-python
+pillow
+matplotlib
+numpy
+pandas
+scikit-learn
+gradio              # ← ADD THIS (for Hugging Face)
+jupyter

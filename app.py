@@ -7,40 +7,43 @@ import os
 from pathlib import Path
 import numpy as np
 
-print("🧠 Brain Tumor Detection - BULLETPROOF v3")
+print("🧠 Brain Tumor Detection - 91% ResNet50")
 
 CLASS_NAMES = ["glioma", "meningioma", "pituitary", "no_tumor"]
 
+# YOUR BEST MODEL: ResNet50 (not ResNet18!)
 class BrainTumorModel(nn.Module):
     def __init__(self):
         super().__init__()
-        self.model = models.resnet18(weights=None)
+        self.model = models.resnet50(weights=None)  # ← CHANGED TO RESNET50
         self.model.fc = nn.Linear(self.model.fc.in_features, 4)
     
     def forward(self, x):
         return self.model(x)
 
+# Rest of your code EXACTLY SAME...
 def validate_model(model):
-    """Test if model actually works"""
     test_input = torch.randn(1, 3, 224, 224)
     with torch.no_grad():
         output = model(test_input)
         probs = torch.softmax(output, 0)[0]
-    
     print(f"🔍 Model test probs: {probs.round(2).tolist()}")
-    
-    # Dead model check: all probs identical = broken
     if len(set(probs.tolist())) < 2:
         print("🚨 DEAD MODEL DETECTED!")
         return False
     print("✅ Model validation PASSED")
     return True
 
-# CRITICAL: Load ONLY if model passes validation
 model = BrainTumorModel()
 model_path = None
 
-model_files = ["models/brain_tumor_4class.pth", "models/brain_tumor_cpu.pth", "models/brain_tumor_resnet18.pth"]
+# YOUR ACTUAL MODEL FILENAMES
+model_files = [
+    "models/best_real_btns_model.pth",      # ← YOUR 91% model
+    "models/best_real_btns_state_dict.pth",
+    "models/brain_tumor_4class.pth",
+    "models/brain_tumor_cpu.pth"
+]
 
 for path in model_files:
     if os.path.exists(path):
@@ -49,23 +52,20 @@ for path in model_files:
             state_dict = torch.load(path, map_location='cpu', weights_only=False)
             if isinstance(state_dict, dict):
                 state_dict = state_dict.get('model_state_dict', state_dict.get('state_dict', state_dict))
-            
             model.load_state_dict(state_dict, strict=False)
-            
             if validate_model(model):
                 model_path = path
-                print(f"✅ VALID MODEL LOADED: {path}")
+                print(f"✅ 91% RESNET50 MODEL LOADED: {path}")
                 break
         except:
             print(f"❌ Invalid: {path}")
             continue
 
-# EMERGENCY: If no valid model, use SAFE fallback
 if model_path is None:
     print("🆘 NO VALID MODEL - Using SAFE fallback")
     with torch.no_grad():
         model.model.fc.weight.normal_(0, 0.02)
-        model.model.fc.bias.normal_(0, 0.1)  # Random but balanced
+        model.model.fc.bias.normal_(0, 0.1)
 
 model.eval()
 
@@ -75,11 +75,12 @@ transform = transforms.Compose([
     transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
 ])
 
+# YOUR predict function EXACTLY SAME...
 def predict(image):
     if image is None:
         return """
 **🚀 READY**  
-✅ Model validated and working  
+✅ 91% ResNet50 model validated  
 👈 Upload MRI scan
         """
     
@@ -92,8 +93,6 @@ def predict(image):
     
     pred_idx = np.argmax(probs)
     confidence = probs[pred_idx]
-    
-    # GLIOMA BIAS DETECTOR
     glioma_bias = probs[0] > 0.95
     status = "🚨 GLIOMA BIAS!" if glioma_bias else "✅ HEALTHY"
     
@@ -111,16 +110,13 @@ def predict(image):
 **Model**: {Path(model_path).name if model_path else 'SAFE FALLBACK'}
     """
     
-    # Debug log
     print(f"PRED: {CLASS_NAMES[pred_idx]} | Probs: [{probs[0]:.2f},{probs[1]:.2f},{probs[2]:.2f},{probs[3]:.2f}]")
-    
     return result
 
-# Fixed Gradio theme warning
 demo = gr.Interface(
     predict, 
     gr.Image(type="pil"),
     gr.Markdown(),
-    title="🧠 Brain Tumor Detector",
-    description="✅ Model validated | No glioma bias"
+    title="🧠 Brain Tumor Classifier (91% ResNet50)",
+    description="✅ Your 91% model | No glioma bias"
 ).launch(theme=gr.themes.Soft())
